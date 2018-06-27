@@ -1,0 +1,90 @@
+<html>
+<head>
+<meta charset="utf8"/>
+<script type="text/javascript" src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<title>LIST</title>
+<script>
+$(function(){
+  getItems();
+});
+
+function getItems(){
+  $('#items_table_tbody').html( '' );
+  $.ajax({
+    type: 'GET',
+    url: '/items',
+    success: function( items ){
+      console.log( items );
+      items.forEach( function( item ){
+        var tr = '<tr><td>' + item.name + '</td><td>' + item.price + '</td><td>' + item.user.id + '</td></tr>';
+        $('#items_table_tbody').append( tr );
+      });
+      var tr = "<tr>"
+        + "<td><input type='text' id='name' placeholder='name'/></td>"
+        + "<td><input type='text' id='price' placeholder='price'/></td>"
+        + "<td><input type='button' class='btn btn-primary' value='Add' onClick='addItem();'/></td>"
+        + "</tr>"
+      $('#items_table_tbody').append( tr );
+    },
+    error: function( err ){
+      console.log( err );
+    }
+  });
+}
+
+function addItem(){
+  var name = $('#name').val();
+  var price = parseInt( $('#price').val() );
+
+  $.ajax({
+    type: 'POST',
+    url: '/item',
+    data: { name: name, price: price },
+    success: function( data ){
+      console.log( data );
+      getItems();
+    },
+    error: function( jqXHR, textStatus, errorThrown ){
+      console.log( textStatus + ":" + errorThrown );
+    }
+  });
+}
+</script>
+</head>
+<body>
+
+<div class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a href="/" class="navbar-brand">Items</a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse target">
+      <ul class="nav navbar-nav navbar-right" id="navbar">
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="padding:20px 0; font-size:8px;">
+  <table class="table table-hover table-bordered" id="documents_table">
+    <thead class="table-inverse">
+      <tr>
+      <th>name</th>
+      <th>price</th>
+      <th>user</th>
+      </tr>
+    </thead>
+    <tbody id="items_table_tbody">
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
