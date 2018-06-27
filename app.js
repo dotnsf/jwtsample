@@ -41,9 +41,15 @@ app.post( '/login', function( req, res ){
     var token = jwt.sign( user, superSecret, { expiresIn: '25h' } );
     req.session.token = token; //. セッションに記錄
 
+    //res.write( JSON.stringify( { status: true, token: token }, 2, null ) );
+    //res.end();
     res.redirect( '/' );
   }else{
     //. ログイン失敗
+
+    //res.status( 401 );
+    //res.write( JSON.stringify( { status: false, message: 'Invalid id and/or password.' }, 2, null ) );
+    //res.end();
     res.redirect( '/login.html' );
   }
 });
@@ -51,6 +57,9 @@ app.post( '/login', function( req, res ){
 //. ログアウト
 app.get( '/logout', function( req, res ){
   req.session.token = null; //. セッションをリセット
+
+  //res.write( JSON.stringify( { status: true }, 2, null ) );
+  //res.end();
   res.redirect( '/' );
 });
 
