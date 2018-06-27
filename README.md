@@ -5,7 +5,7 @@ Simple sample for JWT(Json Web Token) with Express-Session
 
 ## APIs
 
-- GET /
+- GET /(index.html)
 
     - Show index page.
 
